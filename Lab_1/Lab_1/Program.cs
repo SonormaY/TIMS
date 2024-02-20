@@ -154,6 +154,7 @@ static void Task1(){
         {
             Console.WriteLine($"Q{i} квартиль: {sample[((n / 4) * i) - 1]}");
         }
+        Console.WriteLine($"Інтерквартильна широта: {sample[((n / 4) * 3 - 1)] - sample[((n / 4) - 1)]}");
     }
     System.Console.WriteLine();
     if (n % 8 == 0)
@@ -162,6 +163,7 @@ static void Task1(){
         {
             System.Console.WriteLine($"Q{i} октиль: {sample[((n / 8) * i) - 1]}");
         }
+        Console.WriteLine($"Інтероктильна широта: {sample[((n / 8) * 7 - 1)] - sample[((n / 8) - 1)]}");
     }
     System.Console.WriteLine();
     if (n % 10 == 0)
@@ -170,14 +172,16 @@ static void Task1(){
         {
             System.Console.WriteLine($"Q{i} дециль: {sample[((n / 10) * i) - 1]}");
         }
+        Console.WriteLine($"Інтердецильна широта: {sample[((n / 10) * 9 - 1)] - sample[((n / 10) - 1)]}");
     }
     System.Console.WriteLine();
     if (n % 100 == 0)
     {
         for (int i = 1; i <= 99; i++)
         {
-            System.Console.WriteLine();
+            System.Console.WriteLine($"Q{i} центиль: {sample[((n / 100) * i) - 1]}");
         }
+        Console.WriteLine($"Інтерквартильна широта: {sample[((n / 100) * 99 - 1)] - sample[((n / 100) - 1)]}");
     }
     System.Console.WriteLine();
     Console.WriteLine("Коефіцієнти асиметрії та ексцесу");
