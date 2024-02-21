@@ -112,7 +112,7 @@ static void Task1(){
     Console.WriteLine("Центральної тенденції");
     if (n % 2 == 0)
     {
-        Console.WriteLine($"Медіана {sample[(n / 2) - 1]}, {sample[n / 2]}");
+        Console.WriteLine($"Медіана {(sample[(n / 2) - 1] + sample[n / 2]) / 2}");
     }
     else
     {
@@ -280,24 +280,28 @@ static void Task2(){
     var sample_mid = new System.Collections.Generic.Dictionary<double, int>();
     for (int i = 0; i < k; i++)
     {
-        sample_mid.Add(i * h - h / 2 ,hist[intervals[i]]);
+        sample_mid.Add((i + 1) * h - h / 2 ,hist[intervals[i]]);
+    }
+    foreach (var item in sample_mid)
+    {
+        System.Console.WriteLine(item.Key + " " + item.Value);
     }
 
     // Емпірична функція розподілу
     var emp = new double[sample_mid.Keys.Count];
-        for (int i = 0; i < sample_mid.Keys.Count; i++)
-        {
-            emp[i] = sample_mid.Values.Take(i + 1).Sum() / (double)n1;
-        }
-        var lines = new List<GenericChart.GenericChart>();
-        for (int i = 0; i < sample_mid.Keys.Count; i++)
-        {
-            lines.Add(Chart2D.Chart.Line<double, double, int>(
-                x: new double[2]{sample_mid.Keys.ToArray()[i] - h, sample_mid.Keys.ToArray()[i]},
-                y: new double[2] { emp[i], emp[i] }
-            ));
-        }
-        var empiric_func = Chart.Combine(lines);
+    for (int i = 0; i < sample_mid.Keys.Count; i++)
+    {
+        emp[i] = sample_mid.Values.Take(i + 1).Sum() / (double)n1;
+    }
+    var lines = new List<GenericChart.GenericChart>();
+    for (int i = 0; i < sample_mid.Keys.Count; i++)
+    {
+        lines.Add(Chart2D.Chart.Line<double, double, int>(
+            x: new double[2]{sample_mid.Keys.ToArray()[i] - h / 2, sample_mid.Keys.ToArray()[i] + h / 2},
+            y: new double[2] { emp[i], emp[i] }
+        ));
+    }
+    var empiric_func = Chart.Combine(lines);
 
     Chart.Grid<IEnumerable<GenericChart.GenericChart>>(3, 1).Invoke(new[] { table, histogram, empiric_func}).Show();
 
@@ -305,10 +309,9 @@ static void Task2(){
     Console.WriteLine("Центральної тенденції");
     var avg1 = sample1.Average();
     Console.WriteLine($"Середнє арифметичне: {avg1}");
-    System.Console.WriteLine("Медіана: ");
     if (n1 % 2 == 0)
     {
-        Console.WriteLine($"Медіана {sample1[(n1 / 2) - 1]}, {sample1[n1 / 2]}");
+        Console.WriteLine($"Медіана {(sample1[(n1 / 2) - 1] + sample1[n1 / 2]) / 2}");
     }
     else
     {
