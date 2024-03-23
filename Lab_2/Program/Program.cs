@@ -7,8 +7,10 @@ namespace Program
             while (true)
             {
                 Console.Clear();
-                Console.Write("Enter number of Task: ");
-                int task = int.Parse(Console.ReadLine());
+                Console.ResetColor();
+                Console.Title = "Main Menu";
+                Console.Write("Press on keyboard number of Task: ");
+                int task = Console.ReadKey().KeyChar - '0';
                 switch (task)
                 {
                     case 1:
