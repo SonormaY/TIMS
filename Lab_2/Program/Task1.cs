@@ -1,4 +1,6 @@
-﻿namespace Program
+﻿using System.Globalization;
+
+namespace Program
 {
     public static class Task1
     {
@@ -15,10 +17,10 @@
             if (key == ConsoleKey.M)
             {
                 Console.Write("Enter a: ");
-                double inputA = double.Parse(Console.ReadLine() ?? "0");
+                double inputA = double.Parse(Console.ReadLine() ?? "0", CultureInfo.InvariantCulture);
                 a = inputA;
                 Console.Write("Enter sigma: ");
-                sigma = double.Parse(Console.ReadLine() ?? "0");
+                sigma = double.Parse(Console.ReadLine() ?? "0", CultureInfo.InvariantCulture);
             } 
             else if (key == ConsoleKey.A)
             {

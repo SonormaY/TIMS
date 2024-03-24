@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Program
 {
     public static class Task2
@@ -12,7 +14,7 @@ namespace Program
             if (key == ConsoleKey.M)
             {
                 Console.Write("Enter lambda: ");
-                lambda = double.Parse(Console.ReadLine());
+                lambda = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
             }
             else if (key == ConsoleKey.A)
             {

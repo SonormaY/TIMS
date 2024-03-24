@@ -1,3 +1,4 @@
+using System.Globalization;
 using Plotly.NET;
 using Plotly.NET.TraceObjects;
 
@@ -10,9 +11,10 @@ namespace Program
             Dictionary<double, int> result = new Dictionary<double, int>();
             using (StreamReader sr = new StreamReader(path))
             {
+                
                 string[] parameters = sr.ReadLine().Split(',');
-                var start = double.Parse(parameters[0]);
-                var step = double.Parse(parameters[1]);
+                var start = double.Parse(parameters[0], CultureInfo.InvariantCulture);
+                var step = double.Parse(parameters[1], CultureInfo.InvariantCulture);
                 var n = int.Parse(parameters[2]);
                 string[] strData = sr.ReadLine().Split(',');
                 if (strData.Length != n)
@@ -128,7 +130,7 @@ namespace Program
         public static double GetXKr(double r)
         {
             Console.Write("Enter alpha: ");
-            double alpha = double.Parse(Console.ReadLine() ?? "");
+            double alpha = double.Parse(Console.ReadLine() ?? "", CultureInfo.InvariantCulture);
             if (alpha <= 0 || alpha >= 1)
             {
                 Console.WriteLine("Invalid alpha");
