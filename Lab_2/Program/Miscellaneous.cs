@@ -51,7 +51,7 @@ namespace Program
         public static void BuildDiagram(Dictionary<double, int> data)
         {
             Chart2D.Chart.Column<int, double, int, int, int>(
-                values: data.Values.ToArray(),
+                values: data.Values,
                 Keys: data.Keys.ToArray()
             ).Show();
         }
