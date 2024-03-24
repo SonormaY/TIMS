@@ -1,58 +1,10 @@
-﻿using Microsoft.FSharp.Core;
-
-namespace Program
+﻿namespace Program
 {
     public static class Task1
     {
-        public static Dictionary<double, int> InputHandler()
-        {
-            Console.Clear();
-            Console.Write("Enter path to file (press Enter to read from default.txt): ");
-            string path = Console.ReadLine() ?? "";
-            if (string.IsNullOrEmpty(path))
-            {
-                path = "default.txt";
-            }
-            return Miscellaneous.ReadFromFile(path);
-        }
-        public static void PrintArray(double[] arr, bool round = false)
-        {
-            ConsoleColor temp = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (round)
-            {
-                int maximumDigits = arr.Select(x => Math.Round(x, 3).ToString().Length).Max();
-                int dashesToPrint = (maximumDigits + 3) * arr.Length + 1;
-                Console.WriteLine(new string('-', dashesToPrint));
-                Console.WriteLine("| " + string.Join(" | ", arr.Select(k => Math.Round(k ,3).ToString().PadRight(maximumDigits))) + " |");
-                Console.WriteLine(new string('-', dashesToPrint));
-            }
-            else
-            {
-                int maximumDigits = arr.Select(x => x.ToString().Length).Max();
-                int dashesToPrint = (maximumDigits + 3) * arr.Length + 1;
-                Console.WriteLine(new string('-', dashesToPrint));
-                Console.WriteLine("| " + string.Join(" | ", arr.Select(k => k.ToString().PadRight(maximumDigits))) + " |");
-                Console.WriteLine(new string('-', dashesToPrint));
-            }
-            Console.ForegroundColor = temp;
-        }
-        public static void PrintData(Dictionary<double, int> data)
-        {
-            ConsoleColor temp = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            int maximumDigits = Math.Max(data.Values.Max().ToString().Length, data.Keys.Max().ToString().Length);
-            int dashesToPrint = (maximumDigits + 3) * data.Count + 1;
-            Console.WriteLine(new string('-', dashesToPrint));
-            Console.WriteLine("| " + string.Join(" | ", data.Keys.Select(k => k.ToString().PadRight(maximumDigits))) + " |");
-            Console.WriteLine(new string('-', dashesToPrint));
-            Console.WriteLine("| " + string.Join(" | ", data.Values.Select(v => v.ToString().PadRight(maximumDigits))) + " |");
-            Console.WriteLine(new string('-', dashesToPrint));
-            Console.ForegroundColor = temp;
-        }
         public static void GetMiscData(Dictionary<double, int> data, out double h, out double a, out double sigma, out ConsoleKey key)
         {
-            var tempH = GetH(data);
+            var tempH = Miscellaneous.GetH(data);
             h = tempH;
             a = 0;
             sigma = 0;
@@ -77,12 +29,8 @@ namespace Program
             else
             {
                 Console.WriteLine("Invalid key");
+                GetMiscData(data, out h, out a, out sigma, out key);
             }
-        }
-        public static double GetXkr(int value)
-        {
-            double[] Xkr = {3.8415, 5.9915, 7.8147, 9.4877, 11.0705, 12.5916, 14.0671, 15.5073, 16.919, 18.307, 19.6751, 21.0261, 22.362, 23.6848, 24.9958, 26.2962, 27.5871, 28.8693, 30.1435, 31.4104};
-            return Xkr[value - 1];
         }
         public static double Erf(double x)
         {
@@ -122,67 +70,25 @@ namespace Program
             pi[^1] = 1 - pi.Sum();
             return pi;
         }
-        public static double GetH(Dictionary<double, int> data)
-        {
-            return Math.Round(data.Keys.ToArray()[^1] - data.Keys.ToArray()[^2], 3);
-        }
-        public static void MergeData(Dictionary<double, int> data, ref double[] npi)
-        {
-            bool firstHalfDone = false;
-            for (int i = 0; i < npi.Length; i++)
-            {
-                if (npi[i] < 10 || data.Values.ElementAt(i) < 5)
-                {
-                    int indexDecider = firstHalfDone ? i - 1 : i;
-                    data[data.Keys.ElementAt(indexDecider + 1)] += data[data.Keys.ElementAt(indexDecider)];
-                    data.Remove(data.Keys.ElementAt(indexDecider));
-                    npi[indexDecider + 1] += npi[indexDecider];
-                    npi = npi.Where((x, index) => index != indexDecider).ToArray();
-                    i--;
-                }
-                else
-                {
-                    firstHalfDone = true;
-                }
-            }
-        }
         public static int GetR(double[] npi, bool manual)
         {
             return npi.Length - (manual ? 1 : 3);
-        }
-        public static double GetXemp(Dictionary<double, int> data, double[] npi)
-        {
-            return data.Select((x, index) => Math.Pow(x.Value - npi[index], 2) / npi[index]).Sum();
-        }
-        public static void IsH0Rejected(double Xemp, double XKr)
-        {
-            ConsoleColor temp = Console.ForegroundColor;
-            if (Xemp < XKr)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("H0 is accepted");
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("H0 is rejected");
-            }
-            Console.ForegroundColor = temp;
         }
         public static void ExecuteTask1()
         {
             Console.Title = "Task 1";
 
             // Read data from file
-            var data = InputHandler();
+            var data = Miscellaneous.InputHandler();
 
             //Get parameters
             GetMiscData(data, out double h, out double a, out double sigma, out ConsoleKey key);
 
             Console.Clear();    
             // Print data
-            Console.WriteLine("Data:");
-            PrintData(data);
+            Console.WriteLine("H0: data is distributed normally");
+            Console.WriteLine("\nData:");
+            Miscellaneous.PrintData(data);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"\n| a = {Math.Round(a, 3)} | sigma = {Math.Round(sigma, 3)} |\n");
             Console.ResetColor();
@@ -193,26 +99,28 @@ namespace Program
             // Calculate pi and npi
             Console.WriteLine("Pi:");
             var pi = CalculatePi(data, h, a, sigma);
-            PrintArray(pi, true);
+            Miscellaneous.PrintArray(pi, true);
             Console.WriteLine("\nNpi:");
             double[] npi = pi.Select(x => x * data.Values.Sum()).ToArray();
-            PrintArray(npi, true);
+            Miscellaneous.PrintArray(npi, true);
 
             // Merge data
-            MergeData(data, ref npi);
+            Miscellaneous.MergeData(data, ref npi);
             Console.WriteLine("\nMerged data:");
-            PrintData(data);
+            Miscellaneous.PrintData(data);
             Console.WriteLine("\nMerged Npi:");
-            PrintArray(npi, true);
+            Miscellaneous.PrintArray(npi, true);
             
-            // Calculate r, Xemp and compare with XKr
-            int r = GetR(npi, key == ConsoleKey.M);
-            double XKr = GetXkr(r);
-            double Xemp = GetXemp(data, npi);
+            // Calculate r, Xemp and XKr
+            Console.WriteLine();
+            double XKr = Miscellaneous.GetXKr(GetR(npi, key == ConsoleKey.M));
+            double Xemp = Miscellaneous.GetXemp(data, npi);
+
+            // Print results
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"\nXKr = {XKr}, Xemp = {Xemp}");
             Console.ResetColor();
-            IsH0Rejected(Xemp, XKr);
+            Miscellaneous.IsH0Rejected(Xemp, XKr);
             
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("\nPress any key to continue...");
