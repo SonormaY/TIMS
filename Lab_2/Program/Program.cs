@@ -5,12 +5,11 @@ namespace Program
         static void Main(string[] args)
         {
             string[] tasks = { "Task 1", "Task 2", "Exit"};
-            int selectedTaskIndex = 0;
-
-            Console.Title = "Main menu";
+            int selectedTaskIndex = 0;            
 
             while (true)
             {
+                Console.Title = "Main menu";
                 Console.Clear();
                 Console.CursorVisible = false;
 
