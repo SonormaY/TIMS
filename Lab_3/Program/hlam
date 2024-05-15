@@ -1,0 +1,81 @@
+class govno{
+    public static int[] CalculateSums(int[] arr, int n2, int[,] corTable)
+    {
+        int[] x_n = new int[arr.Length];
+        for (int i = 0; i < arr.Length; i++)
+        {
+            int sum_x = 0;
+            for (int j = 0; j < n2; j++)
+            {
+                sum_x += corTable[j, i];
+            }
+            x_n[i] = sum_x;
+        }
+        return x_n;
+    }
+    public static double[] CalculateConditionalAverages(int[] y, int n2, int[] x_n, int[,] corTable)
+    {
+        double[] yxk = new double[n2];
+        for (int i = 0; i < n2; i++)
+        {
+            for (int j = 0; j < y.Length; j++)
+            {
+                yxk[i] += y[j] * corTable[j, i];
+            }
+            yxk[i] /= x_n[i];
+        }
+        return yxk;
+    }
+    public static (double a, double b) CalculateAB(int[] x, int[] x_n, double[] yxk)
+    {
+        double [] firstEquation = new double[3];
+        double [] secondEquation = new double[3];
+
+        for (int i = 0; i < x.Length; i++)
+        {
+        firstEquation[0] += x[i] * x_n[i];
+        firstEquation[1] += x_n[i];
+        firstEquation[2] += x_n[i] * Math.Log10(yxk[i]);
+
+        secondEquation[0] += x[i] * x[i] * x_n[i];
+        secondEquation[1] += x[i] * x_n[i];
+        secondEquation[2] += x_n[i] * x[i] * Math.Log10(yxk[i]);
+        }
+        
+        var A = Matrix<double>.Build.DenseOfArray(new double[,] {
+        {firstEquation[0], firstEquation[1]},
+        {secondEquation[0], secondEquation[1]}
+        });
+
+        var B = Vector<double>.Build.Dense(new double[] {
+        firstEquation[2],
+        secondEquation[2]
+        });
+
+        var X = A.Solve(B);
+        double a = Math.Pow(10, X[0]);
+        double b = Math.Pow(10, X[1]);
+        return (a, b);
+    }
+    public static double CalculateD(int[] x, int[] y, int[,] CorTable, double a, double b, int N){
+            double delta = 0;
+            for (int i = 0; i < y.Length; i++)
+            {
+                for ( int j = 0; j < x.Length; j++)
+                {
+                    delta += CorTable[i, j] * Math.Pow(y[i] - b * Math.Pow(a, x[j]), 2);
+                }
+                Console.WriteLine($"delta_{i} = {delta}");
+            }
+            return delta / N;
+        }
+        public static double CalculateDelta(int[] x, int[] x_n, double[] yxk, double a, double b)
+        {
+            double deltaSqr = 0;
+            for (int i = 0; i < x.Length; i++)
+            {
+                deltaSqr += Math.Pow(yxk[i] - b * Math.Pow(a, x[i]), 2) * x_n[i];
+            }
+            return deltaSqr;
+        }
+}
