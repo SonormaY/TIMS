@@ -21,17 +21,18 @@ namespace Lab_3
                 {"Run", () => {
                     var x_n = Lab.CalculateSumsLINQ(x.Length, y.Length, CorTable);
                     string x_n_str = string.Join(" | ", x_n);
-                    Console.WriteLine(new string('-', x_n_str.Length + 9) + $"\nx_n: | {x_n_str} |");
+                    Console.WriteLine(new string('-', x_n_str.Length + 9) + $"\nnᵢ: | {x_n_str} |");
 
                     var yxk = Lab.CalculateConditionalAveragesLINQ(y, x.Length, x_n, CorTable);
                     string y_xk_str = string.Join(" | ", yxk.Select(n => Math.Round((decimal)n, 3)));
-                    Console.WriteLine(new string('-', y_xk_str.Length + 10) + $"\ny_xk: | {y_xk_str} |" + "\n" + new string('-', y_xk_str.Length + 10));
+                    Console.WriteLine(new string('-', y_xk_str.Length + 10) + $"\nȳₓ: | {y_xk_str} |" + "\n" + new string('-', y_xk_str.Length + 10));
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Assumption: Exponential function\n");
 
                     var (a, b) = Lab.CalculateABLINQ(x, x_n, yxk);
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"a: {Math.Round(a, 3)}, b: {Math.Round(b, 3)}\n");
+                    Console.WriteLine($"ȳₓ = {Math.Round(b, 3)} * {Math.Round(a, 3)}ˣ\n");
                     Chart.Combine([
                         Lab.GetPoints(x, yxk),
                         Lab.GetLine(x, yxk, a, b)

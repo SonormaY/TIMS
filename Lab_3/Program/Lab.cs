@@ -65,7 +65,6 @@ namespace Lab_3
             points.Show();
             var combine = Chart.Combine([points, line]);
             combine.Show();
-            //Chart.Grid<IEnumerable<GenericChart.GenericChart>>(2,2).Invoke([points, line, combine]).Show();
         }
         public static double CalculateDLINQ(int[] x, int[] y, int[,] CorTable, double a, double b, int N){
             return Enumerable.Range(0, y.Length)
