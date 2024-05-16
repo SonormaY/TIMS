@@ -21,11 +21,11 @@ namespace Lab_3
                 {"Run", () => {
                     var x_n = Lab.CalculateSumsLINQ(x.Length, y.Length, CorTable);
                     string x_n_str = string.Join(" | ", x_n);
-                    Console.WriteLine(new string('-', x_n_str.Length + 9) + $"\nnᵢ: | {x_n_str} |");
+                    Console.WriteLine(new string('-', x_n_str.Length + 8) + $"\nnᵢ: | {x_n_str} |");
 
                     var yxk = Lab.CalculateConditionalAveragesLINQ(y, x.Length, x_n, CorTable);
                     string y_xk_str = string.Join(" | ", yxk.Select(n => Math.Round((decimal)n, 3)));
-                    Console.WriteLine(new string('-', y_xk_str.Length + 10) + $"\nȳₓ: | {y_xk_str} |" + "\n" + new string('-', y_xk_str.Length + 10));
+                    Console.WriteLine(new string('-', y_xk_str.Length + 8) + $"\nȳₓ: | {y_xk_str} |" + "\n" + new string('-', y_xk_str.Length + 8));
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Assumption: Exponential function\n");
 
@@ -38,8 +38,8 @@ namespace Lab_3
                         Lab.GetLine(x, yxk, a, b)
                     ]).Show();
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine($"D: {Math.Round(Lab.CalculateDLINQ(x, y, CorTable, a, b, x_n.Sum()), 3)}");
-                    Console.WriteLine($"Delta: {Math.Round(Lab.CalculateDeltaLINQ(x, x_n, yxk, a, b), 3)}");
+                    Console.WriteLine($"σ²: {Math.Round(Lab.CalculateDLINQ(x, y, CorTable, a, b, x_n.Sum()), 3)}");
+                    Console.WriteLine($"δ²: {Math.Round(Lab.CalculateDeltaLINQ(x, x_n, yxk, a, b), 3)}");
                 }}
             };
 

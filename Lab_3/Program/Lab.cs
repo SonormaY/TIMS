@@ -47,7 +47,7 @@ namespace Lab_3
         }
         public static GenericChart.GenericChart GetPoints(int[] x, double[] yxk)
         {
-            return Chart2D.Chart.Point<int, double, double>(x, yxk, Name: "M(x_i, y_ser_i)");
+            return Chart2D.Chart.Point<int, double, double>(x, yxk, Name: "M(xᵢ, ȳₓ)");
         }
         public static GenericChart.GenericChart GetLine(int[] x, double[] yxk, double a, double b)
         {
@@ -55,7 +55,7 @@ namespace Lab_3
                 .Select(i => -1 + i * 0.0012)
                 .ToArray();
             double[] yRegres = xRegres.Select(x => b * Math.Pow(a, x)).ToArray();
-            return Chart2D.Chart.Line<double, double, double>(x: xRegres, y: yRegres, Name: "y = b * a^x");
+            return Chart2D.Chart.Line<double, double, double>(x: xRegres, y: yRegres, Name: $"ȳₓ = {Math.Round(b, 3)} * {Math.Round(a, 3)}ˣ\n");
         }
         public static void ShowCharts(int[] x, double[] yxk, int[] x_n, double a, double b)
         {
